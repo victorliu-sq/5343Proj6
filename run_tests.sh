@@ -1,5 +1,6 @@
 #!/bin/bash
 
+clear
 # Directory containing test files
 test_dir="./test_proj_1"
 
