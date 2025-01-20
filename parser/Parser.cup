@@ -23,7 +23,9 @@ parser code {:
 terminal INT, DOUBLE, RETURN, IF, ELSE;
 
 /* TODO: add more operators */
-
+/* Jiaxin: newly added binary operators */
+terminal SUB, DIV, MOD;
+terminal PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
 
 /* punctuators */
 terminal SEMICOLON, LPAREN, RPAREN, LBRACK, RBRACK, LBRACE, RBRACE, ASSIGN, PLUS, MUL;
@@ -32,10 +34,6 @@ terminal Integer INTCONST;
 terminal Double  DOUBLECONST;
 /* names */
 terminal String IDENT;
-
-/* newly added binary operators */
-terminal SUB, DIV, MOD;
-terminal PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
 
 
 non terminal Program program;
@@ -52,7 +50,7 @@ precedence right ASSIGN;
 precedence left PLUS;
 precedence left MUL;
 
-/* newly added binary operators */
+/* Jiaxin: newly added binary operators */
 precedence left  SUB, DIV, MOD;
 precedence right PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
 
