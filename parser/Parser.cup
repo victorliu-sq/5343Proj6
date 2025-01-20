@@ -46,14 +46,13 @@ non terminal Expr expr;
 non terminal List<Expr> arrayDim;
 non terminal BinaryExpr binaryExpr;
 
-precedence right ASSIGN;
+/** precedence right ASSIGN;
 precedence left PLUS;
-precedence left MUL;
-
+precedence left MUL; */
 /* Jiaxin: newly added binary operators */
-precedence left  SUB, DIV, MOD;
-precedence right PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
-
+precedence right ASSIGN, PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
+precedence left PLUS, SUB;
+precedence left MUL, DIV, MOD;
 
 precedence left ELSE; // resolve "dangling else" ambiguity
 start with program;
