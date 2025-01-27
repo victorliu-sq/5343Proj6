@@ -21,6 +21,8 @@ int f() {
     d = 0.0000000000001E-123f;
 
     /* valid hexadecimal double literals */
+    /* hexadecimal double literals must contain exponential part */
+    d = 0x1.0p0;
     d = 0x1.0p10;
     d = 0x.8p-4;
     d = 0x1p+4f;

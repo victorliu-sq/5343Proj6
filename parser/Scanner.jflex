@@ -117,6 +117,9 @@ white_space = {new_line} | [ \t\f]
 "return"          { return symbol("return",      RETURN); }
 "if"              { return symbol("if",          IF); }
 "else"            { return symbol("else",        ELSE); }
+/* Project2 - while & for keywords are added */
+"while"           { return symbol("while",       WHILE); }
+"for"             { return symbol("for",         FOR); }
 
 /* literals */
 {IntLiteral}    { return symbol("Intconst", INTCONST, Integer.decode(yytext())); }
@@ -149,6 +152,14 @@ white_space = {new_line} | [ \t\f]
 "*="              { return symbol("*=", MUL_ASSIGN); }
 "/="              { return symbol("/=", DIV_ASSIGN); }
 "%="              { return symbol("%=", MOD_ASSIGN); }
+
+/* relational and equality binary operators */
+"<"               { return symbol("<", LT); }
+"<="              { return symbol("<=", LE); }
+">"               { return symbol(">", GT); }
+">="              { return symbol(">=", GE); }
+"=="              { return symbol("==", EQ); }
+"!="              { return symbol("!=", NE); }
 
 /*** TODO END ***/
 

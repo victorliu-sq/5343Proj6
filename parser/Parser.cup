@@ -20,12 +20,15 @@ parser code {:
 :};
 
 /* keywords */
-terminal INT, DOUBLE, RETURN, IF, ELSE;
+/* Project2: newly added WHILE and FOR keywords */
+terminal INT, DOUBLE, RETURN, IF, ELSE, WHILE, FOR;
 
 /* TODO: add more operators */
-/* Jiaxin: newly added binary operators */
+/* Project1: added binary operators */
 terminal SUB, DIV, MOD;
 terminal PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
+/* Project2: added binary relational and equality operators */
+terminal LT, LE, GT, GE, EQ, NE;
 
 /* punctuators */
 terminal SEMICOLON, LPAREN, RPAREN, LBRACK, RBRACK, LBRACE, RBRACE, ASSIGN, PLUS, MUL;
@@ -49,8 +52,10 @@ non terminal BinaryExpr binaryExpr;
 /** precedence right ASSIGN;
 precedence left PLUS;
 precedence left MUL; */
-/* Jiaxin: newly added binary operators */
+/* Project 1: newly added binary operators */
 precedence right ASSIGN, PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
+/* Project 2: newly added binary operators */
+precedence left EQ, NE, LT, LE, GT, GE;
 precedence left PLUS, SUB;
 precedence left MUL, DIV, MOD;
 
@@ -74,6 +79,8 @@ arrayDecl ::= /* empty list */ {: RESULT = new LinkedList<Integer>(); :}
 stmtList ::= /* empty list */ {: RESULT = new LinkedList<Stmt>(); :}
            | stmt:s stmtList:l  {: l.add(0,s); RESULT = l; :} 
 ;
+
+/* Project2: newly added WHILE and FOR keywords */
 stmt ::= expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
        | RETURN expr:e SEMICOLON {: RESULT = new ReturnStmt(e); :}
        | LBRACE stmtList:l RBRACE {: RESULT = new BlockStmt(l); :}
@@ -81,6 +88,10 @@ stmt ::= expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
          {: RESULT = new IfStmt(e, s); :}
        | IF LPAREN expr:e RPAREN stmt:s1 ELSE stmt:s2
          {: RESULT = new IfStmt(e, s1, s2); :}
+       | WHILE LPAREN expr:e RPAREN stmt:s
+         {: RESULT = new WhileStmt(e, s); :}
+       | FOR LPAREN expr:e1 SEMICOLON expr:e2 SEMICOLON expr:e3 RPAREN stmt:s
+         {: RESULT = new ForStmt(e1, e2, e3, s); :}
        | SEMICOLON {: RESULT = new EmptyStmt(); :}
 ;
 expr ::= INTCONST:ic {: RESULT = new IntConstExpr(ic); :}
@@ -97,6 +108,7 @@ arrayDim ::= LBRACK expr:e RBRACK {: RESULT = new LinkedList<Expr>(); RESULT.add
 binaryExpr ::= expr:e1 PLUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PLUS, e2); :}
              | expr:e1 MUL expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.MUL, e2); :}
              | expr:e1 ASSIGN expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.ASSIGN, e2); :}
+             /* Project 1 */
              | expr:e1 SUB expr:e2            {: RESULT = new BinaryExpr(e1, BinaryExpr.SUB, e2); :}
              | expr:e1 DIV expr:e2            {: RESULT = new BinaryExpr(e1, BinaryExpr.DIV, e2); :}
              | expr:e1 MOD expr:e2            {: RESULT = new BinaryExpr(e1, BinaryExpr.MOD, e2); :}
@@ -105,6 +117,13 @@ binaryExpr ::= expr:e1 PLUS expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.PL
              | expr:e1 MUL_ASSIGN expr:e2     {: RESULT = new BinaryExpr(e1, BinaryExpr.MUL_ASSIGN, e2); :}
              | expr:e1 DIV_ASSIGN expr:e2     {: RESULT = new BinaryExpr(e1, BinaryExpr.DIV_ASSIGN, e2); :}
              | expr:e1 MOD_ASSIGN expr:e2     {: RESULT = new BinaryExpr(e1, BinaryExpr.MOD_ASSIGN, e2); :}
+             /* Project 2 */
+             | expr:e1 LT expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.LT, e2); :}
+             | expr:e1 LE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.LE, e2); :}
+             | expr:e1 GT expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.GT, e2); :}
+             | expr:e1 GE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.GE, e2); :}
+             | expr:e1 EQ expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.EQ, e2); :}
+             | expr:e1 NE expr:e2 {: RESULT = new BinaryExpr(e1, BinaryExpr.NE, e2); :}
 ;
 
 

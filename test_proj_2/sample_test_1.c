@@ -1,0 +1,1 @@
+double lpc() { < int x; int y; int z; z = x < 5 + y < 6; }

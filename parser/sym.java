@@ -8,34 +8,42 @@ package parser;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int RBRACK = 19;
-  public static final int MOD = 9;
-  public static final int MOD_ASSIGN = 14;
-  public static final int IDENT = 27;
-  public static final int SEMICOLON = 15;
-  public static final int ELSE = 6;
-  public static final int PLUS = 23;
-  public static final int RBRACE = 21;
-  public static final int RPAREN = 17;
-  public static final int INT = 2;
-  public static final int LBRACK = 18;
-  public static final int RETURN = 4;
-  public static final int INTCONST = 25;
-  public static final int IF = 5;
-  public static final int LBRACE = 20;
-  public static final int LPAREN = 16;
-  public static final int SUB = 7;
-  public static final int EOF = 0;
-  public static final int DIV = 8;
-  public static final int PLUS_ASSIGN = 10;
-  public static final int DOUBLECONST = 26;
-  public static final int error = 1;
-  public static final int ASSIGN = 22;
-  public static final int MUL = 24;
-  public static final int SUB_ASSIGN = 11;
-  public static final int MUL_ASSIGN = 12;
-  public static final int DIV_ASSIGN = 13;
+  public static final int GE = 20;
+  public static final int PLUS_ASSIGN = 12;
   public static final int DOUBLE = 3;
+  public static final int LPAREN = 24;
+  public static final int INT = 2;
+  public static final int FOR = 8;
+  public static final int RPAREN = 25;
+  public static final int SUB_ASSIGN = 13;
+  public static final int SEMICOLON = 23;
+  public static final int LT = 17;
+  public static final int INTCONST = 33;
+  public static final int DOUBLECONST = 34;
+  public static final int DIV = 10;
+  public static final int PLUS = 31;
+  public static final int ASSIGN = 30;
+  public static final int IF = 5;
+  public static final int LE = 18;
+  public static final int EOF = 0;
+  public static final int RETURN = 4;
+  public static final int error = 1;
+  public static final int MUL = 32;
+  public static final int MOD = 11;
+  public static final int IDENT = 35;
+  public static final int EQ = 21;
+  public static final int DIV_ASSIGN = 15;
+  public static final int LBRACK = 26;
+  public static final int MOD_ASSIGN = 16;
+  public static final int LBRACE = 28;
+  public static final int ELSE = 6;
+  public static final int RBRACK = 27;
+  public static final int WHILE = 7;
+  public static final int RBRACE = 29;
+  public static final int NE = 22;
+  public static final int MUL_ASSIGN = 14;
+  public static final int GT = 19;
+  public static final int SUB = 9;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -44,6 +52,8 @@ public interface sym {
   "RETURN",
   "IF",
   "ELSE",
+  "WHILE",
+  "FOR",
   "SUB",
   "DIV",
   "MOD",
@@ -52,6 +62,12 @@ public interface sym {
   "MUL_ASSIGN",
   "DIV_ASSIGN",
   "MOD_ASSIGN",
+  "LT",
+  "LE",
+  "GT",
+  "GE",
+  "EQ",
+  "NE",
   "SEMICOLON",
   "LPAREN",
   "RPAREN",

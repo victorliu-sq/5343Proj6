@@ -1,0 +1,1 @@
+double lpc() { int x; x = x - - x; }
