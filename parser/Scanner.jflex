@@ -153,7 +153,7 @@ white_space = {new_line} | [ \t\f]
 "/="              { return symbol("/=", DIV_ASSIGN); }
 "%="              { return symbol("%=", MOD_ASSIGN); }
 
-/* relational and equality binary operators */
+/* Project2 relational and equality binary operators */
 "<"               { return symbol("<", LT); }
 "<="              { return symbol("<=", LE); }
 ">"               { return symbol(">", GT); }
