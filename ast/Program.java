@@ -138,8 +138,6 @@ public class Program extends ASTNode {
         if (cfg.nodes.size() > 0) {
             cfg.entry.successors.add(cfg.nodes.get(0));
         }
-        cfg.nodes.add(cfg.entry);
-        cfg.nodes.add(cfg.exit);
 
         return cfg;
     }
@@ -175,7 +173,7 @@ public class Program extends ASTNode {
         }
 
         public int getNodeCount() {
-            return nodes.size();
+            return nodes.size() + 2;
         }
 
         public int getEdgeCount() {
@@ -183,6 +181,7 @@ public class Program extends ASTNode {
             for (CFGNode node : nodes) {
                 edges += node.successors.size();
             }
+            edges += entry.successors.size();
             return edges;
         }
 
