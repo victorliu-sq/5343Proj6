@@ -29,6 +29,7 @@ public class Program extends ASTNode {
     public void cfgAnalysis(PrintStream ps) {
         CFG cfg = constructCFG();
         cfg.printStats(ps);
+        cfg.analyzeLoops(ps);
     }
 
     // Construct the CFG
@@ -188,6 +189,87 @@ public class Program extends ASTNode {
         public void printStats(PrintStream ps) {
             ps.println("CFG NODES: " + getNodeCount());
             ps.println("CFG EDGES: " + getEdgeCount());
+        }
+
+        public void analyzeLoops(PrintStream ps) {
+            // DFS setup
+            Map<CFGNode, String> color = new HashMap<>();
+            for (CFGNode node : nodes) {
+                color.put(node, "WHITE");
+            }
+            color.put(entry, "WHITE");
+
+            List<Edge> backEdges = new ArrayList<>();
+            dfs(entry, color, backEdges);
+
+            // Identify all loop nodes
+            Set<CFGNode> nodesInLoops = new HashSet<>();
+            for (Edge e : backEdges) {
+                Set<CFGNode> loop = findNaturalLoop(e.from, e.to);
+                nodesInLoops.addAll(loop);
+            }
+
+            ps.println("BACK EDGES: " + backEdges.size());
+            ps.println("NODES IN LOOPS: " + nodesInLoops.size());
+        }
+
+        // DFS traversal to find back edges
+        private void dfs(CFGNode node, Map<CFGNode, String> color, List<Edge> backEdges) {
+            color.put(node, "GRAY");
+            for (CFGNode succ : node.successors) {
+                String succColor = color.getOrDefault(succ, "WHITE");
+                if (succColor.equals("WHITE")) {
+                    dfs(succ, color, backEdges);
+                } else if (succColor.equals("GRAY")) {
+                    // Found a back edge (retreating)
+                    backEdges.add(new Edge(node, succ));
+                }
+            }
+            color.put(node, "BLACK");
+        }
+
+        // Find the natural loop of a back edge n -> h
+        private Set<CFGNode> findNaturalLoop(CFGNode n, CFGNode h) {
+            Set<CFGNode> loop = new HashSet<>();
+            Deque<CFGNode> worklist = new ArrayDeque<>();
+            loop.add(h);
+            loop.add(n);
+            worklist.add(n);
+
+            while (!worklist.isEmpty()) {
+                CFGNode m = worklist.pop();
+                for (CFGNode pred : getPredecessors(m)) {
+                    if (!loop.contains(pred)) {
+                        loop.add(pred);
+                        worklist.add(pred);
+                    }
+                }
+            }
+
+            return loop;
+        }
+
+        // Helper to find predecessors of a node
+        private List<CFGNode> getPredecessors(CFGNode node) {
+            List<CFGNode> preds = new ArrayList<>();
+            for (CFGNode potentialPred : nodes) {
+                if (potentialPred.successors.contains(node)) {
+                    preds.add(potentialPred);
+                }
+            }
+            if (entry.successors.contains(node)) {
+                preds.add(entry);
+            }
+            return preds;
+        }
+
+        // Represent a back edge
+        private static class Edge {
+            CFGNode from, to;
+            public Edge(CFGNode f, CFGNode t) {
+                this.from = f;
+                this.to = t;
+            }
         }
     }
 }
