@@ -107,13 +107,13 @@ public class Program extends ASTNode {
                 String target = ((GotoStmt) lastStmt).labelName;
                 Integer targetIndex = label2StartIndex.get(target);
                 CFGNode targetBlock = startIndex2Block.get(targetIndex);
-                block.successors.add(targetBlock);
+                block.addEdge(targetBlock);
             } else if (lastStmt instanceof IfStmt) {
                 IfStmt ifStmt = (IfStmt) lastStmt;
                 String target = ((GotoStmt) ifStmt.thenStmt).labelName;
                 Integer targetIndex = label2StartIndex.get(target);
                 CFGNode targetBlock = startIndex2Block.get(targetIndex);
-                block.successors.add(targetBlock);
+                block.addEdge(targetBlock);
 
                 CFGNode regularTarget;
                 if (i + 1 < leaderList.size()) {
@@ -121,23 +121,22 @@ public class Program extends ASTNode {
                 } else {
                     regularTarget = cfg.exit; // Connect to EXIT for return or last statement
                 }
-                block.successors.add(regularTarget);
+                block.addEdge(regularTarget);
             } else {
-
                 CFGNode regularTarget;
                 if (i + 1 < leaderList.size()) {
                     regularTarget = startIndex2Block.get(cfg.nodes.get(i + 1).startIndex);
                 } else {
                     regularTarget = cfg.exit; // Connect to EXIT for return or last statement
                 }
-                block.successors.add(regularTarget);
+                block.addEdge(regularTarget);
             }
         }
 
         // Initialize ENTRY as the first block
         cfg.entry = new CFGNode("ENTRY", -1, -1);
         if (cfg.nodes.size() > 0) {
-            cfg.entry.successors.add(cfg.nodes.get(0));
+            cfg.entry.addEdge(cfg.nodes.get(0));
         }
 
         return cfg;
@@ -149,12 +148,19 @@ public class Program extends ASTNode {
         int startIndex;           // Starting index in sList
         int endIndex;           // Starting index in sList
         List<CFGNode> successors;
+        List<CFGNode> predecessors; // NEW
 
         public CFGNode(String name, int startIndex, int endIndex) {
             this.name = name;
             this.startIndex = startIndex;
             this.endIndex = endIndex;
-            successors = new ArrayList<>();
+            this.successors = new ArrayList<>();
+            this.predecessors = new ArrayList<>(); // NEW
+        }
+
+        public void addEdge(CFGNode to) {
+            this.successors.add(to);
+            to.predecessors.add(this); // Maintain reverse link
         }
     }
 
@@ -232,35 +238,24 @@ public class Program extends ASTNode {
         private Set<CFGNode> findNaturalLoop(CFGNode n, CFGNode h) {
             Set<CFGNode> loop = new HashSet<>();
             Deque<CFGNode> worklist = new ArrayDeque<>();
+//            System.out.println("From " + n.name + "; To " + h.name);
             loop.add(h);
-            loop.add(n);
-            worklist.add(n);
 
-            while (!worklist.isEmpty()) {
-                CFGNode m = worklist.pop();
-                for (CFGNode pred : getPredecessors(m)) {
-                    if (!loop.contains(pred)) {
-                        loop.add(pred);
-                        worklist.add(pred);
+            if (h != n) {
+                loop.add(n);
+                worklist.add(n);
+                while (!worklist.isEmpty()) {
+                    CFGNode m = worklist.pop();
+                    for (CFGNode pred : m.predecessors) {
+                        if (loop.add(pred)) {
+//                            System.out.println("Added: " + pred.name);
+                            worklist.push(pred);
+                        }
                     }
                 }
             }
 
             return loop;
-        }
-
-        // Helper to find predecessors of a node
-        private List<CFGNode> getPredecessors(CFGNode node) {
-            List<CFGNode> preds = new ArrayList<>();
-            for (CFGNode potentialPred : nodes) {
-                if (potentialPred.successors.contains(node)) {
-                    preds.add(potentialPred);
-                }
-            }
-            if (entry.successors.contains(node)) {
-                preds.add(entry);
-            }
-            return preds;
         }
 
         // Represent a back edge
