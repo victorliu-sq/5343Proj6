@@ -2,7 +2,7 @@
 
 clear
 # Directory containing test files
-test_dir="./test_proj_2"
+test_dir="./test_proj_6"
 
 # Check if the directory exists
 if [ ! -d "$test_dir" ]; then

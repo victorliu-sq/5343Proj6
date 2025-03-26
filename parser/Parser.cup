@@ -29,6 +29,10 @@ terminal SUB, DIV, MOD;
 terminal PLUS_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN;
 /* Project2: added binary relational and equality operators */
 terminal LT, LE, GT, GE, EQ, NE;
+/* Project6: GOTO and :*/
+terminal GOTO;
+terminal NOT;
+terminal COLON;
 
 /* punctuators */
 terminal SEMICOLON, LPAREN, RPAREN, LBRACK, RBRACK, LBRACE, RBRACE, ASSIGN, PLUS, MUL;
@@ -59,6 +63,7 @@ precedence left EQ, NE;
 precedence left LT, LE, GT, GE;
 precedence left PLUS, SUB;
 precedence left MUL, DIV, MOD;
+precedence left NOT;
 
 precedence left ELSE; // resolve "dangling else" ambiguity
 start with program;
@@ -82,6 +87,7 @@ stmtList ::= /* empty list */ {: RESULT = new LinkedList<Stmt>(); :}
 ;
 
 /* Project2: newly added WHILE and FOR keywords */
+/* Project2: newly added GOTO and COLON keywords */
 stmt ::= expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
        | RETURN expr:e SEMICOLON {: RESULT = new ReturnStmt(e); :}
        | LBRACE stmtList:l RBRACE {: RESULT = new BlockStmt(l); :}
@@ -94,8 +100,11 @@ stmt ::= expr:e SEMICOLON {: RESULT = new ExprStmt(e); :}
        | FOR LPAREN expr:e1 SEMICOLON expr:e2 SEMICOLON expr:e3 RPAREN stmt:s
          {: RESULT = new ForStmt(e1, e2, e3, s); :}
        | SEMICOLON {: RESULT = new EmptyStmt(); :}
+       | GOTO IDENT:i SEMICOLON {: RESULT = new GotoStmt(i); :}    // (1) NEW
+       | IDENT:i COLON {: RESULT = new LabelStmt(i); :}   // (2) NEW
 ;
-expr ::= INTCONST:ic {: RESULT = new IntConstExpr(ic); :}
+expr ::=  INTCONST:ic {: RESULT = new IntConstExpr(ic); :}
+        | NOT expr:e {: RESULT = new NotExpr(e); :}
        | DOUBLECONST:dc {: RESULT = new DoubleConstExpr(dc); :}
        | IDENT:i {: RESULT = new IdentExpr(i); :}
        | IDENT:i arrayDim:a {: RESULT = new ArrayExpr(i, a); :}

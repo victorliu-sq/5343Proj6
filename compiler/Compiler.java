@@ -29,6 +29,7 @@ public class Compiler {
 
         // Simplistic pretty printing of the AST
         astRoot.print(System.out);
+        astRoot.cfgAnalysis(System.out);
 
         System.exit(EXIT_SUCCESS);
     }

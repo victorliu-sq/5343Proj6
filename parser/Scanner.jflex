@@ -120,6 +120,10 @@ white_space = {new_line} | [ \t\f]
 /* Project2 - while & for keywords are added */
 "while"           { return symbol("while",       WHILE); }
 "for"             { return symbol("for",         FOR); }
+/* Project6 goto and ! */
+"goto"          { return symbol("goto", GOTO); }
+"!"             { return symbol("!", NOT); }
+":"             { return symbol(":", COLON); }
 
 /* literals */
 {IntLiteral}    { return symbol("Intconst", INTCONST, Integer.decode(yytext())); }
@@ -160,6 +164,8 @@ white_space = {new_line} | [ \t\f]
 ">="              { return symbol(">=", GE); }
 "=="              { return symbol("==", EQ); }
 "!="              { return symbol("!=", NE); }
+
+
 
 /*** TODO END ***/
 
